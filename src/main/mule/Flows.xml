@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="FlowsFlow" doc:id="c78c089d-903a-4b7d-bdd1-f7e0b32c480b" >
+		<http:listener doc:name="Listener" doc:id="db1608e5-ffe1-40ad-96b8-a863d54cffc7" path="/flow" config-ref="HTTP_Listener_config_common"/>
+		<set-payload value='#["This is Main flow started"]' doc:name="Set Payload" doc:id="14c86e49-88e1-41a7-9d9b-704706077a05" mimeType="application/json"/>
+		<logger level="INFO" doc:name="Logger" doc:id="15e99744-a13a-468b-af9a-fc7f5b104408" message="#[payload]"/>
+		<async doc:name="Async" doc:id="c767e05a-6656-429d-ab30-6a939ff82b28" >
+			<flow-ref doc:name="Sub_Flow" doc:id="c505ba9a-167d-4b13-8396-63b72472fc1a" name="Sub_Flow" />
+		</async>
+		<async doc:name="Async" doc:id="0f71cd95-c2c2-4f9c-a8e2-34abbb4f46de" >
+			<flow-ref doc:name="PrivateFlow" doc:id="3e9a1acc-1529-4987-87f6-1a97aee7051b" name="PrivateFlow" />
+		</async>
+		<set-payload value='#["Main Flow Ended"]' doc:name="Set Payload" doc:id="aaa6bcb7-fe5e-4a67-b19b-08e3ad5cefdf" mimeType="application/json"/>
+		<logger level="INFO" doc:name="Logger" doc:id="1081f1bd-8003-45fd-b6cd-878e0a76822c" message="#[payload]"/>
+	</flow>
+	<sub-flow name="Sub_Flow" doc:id="bb577700-6bd9-4ec0-9b07-a6db2d1b92a9" >
+		<set-payload value='#["SubFlow Starte"]' doc:name="Set Payload" doc:id="7efbb5bc-fb51-4e98-87e7-2f223f6fad3b" mimeType="application/json"/>
+		<logger level="INFO" doc:name="Logger" doc:id="a6e8d480-2dec-438d-87fd-2bd68fd6a566" message="#[payload]"/>
+		<set-payload value='#["SubFlow Ended"]' doc:name="Set Payload" doc:id="df4ae200-6a70-4f51-ac1b-1ac48188848b" mimeType="application/json"/>
+		<logger level="INFO" doc:name="Logger" doc:id="01058ad3-bd03-437e-8dc3-7dbd0a56fe39" message="#[payload]"/>
+	</sub-flow>
+	<flow name="PrivateFlow" doc:id="ab254bd0-9bd2-4351-a92d-ec0a1d4d8e8a" >
+		<http:listener doc:name="Listener" doc:id="9da249c5-b829-4638-81c4-7fc428496786" path="/private" config-ref="HTTP_Listener_config_common"/>
+		<set-payload value='#["PrivateFlow Started"]' doc:name="Set Payload" doc:id="a75d8920-552c-4092-a10c-abe6a4838057" mimeType="application/json"/>
+		<logger level="INFO" doc:name="Logger" doc:id="7cfbb74e-555d-4d91-b6f7-6754d8802923" message="#[payload]"/>
+		<set-payload value='#["PrivateFlow Ended"]' doc:name="Set Payload" doc:id="1406a900-940e-4751-8d4f-5bef2ed4c6a2" mimeType="application/json"/>
+		<logger level="INFO" doc:name="Logger" doc:id="28b0c033-ffb7-4bb8-8c57-aef2a405c8c4" message="#[payload]"/>
+	</flow>
+</mule>

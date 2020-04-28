@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="error-handlingFlow" doc:id="d31c9f76-2078-4ada-8915-976d404df2f1" >
+		<http:listener doc:name="Listener" doc:id="802e6f3c-54fb-47c0-accc-a724bec6fef0" config-ref="HTTP_Listener_config_common" path="/error"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b051b3ec-8983-4792-bbb9-eab459ee987a" message='"befor error"'/>
+		<raise-error doc:name="Raise error" doc:id="44c50d2c-2363-4f82-8ca5-b14145e0dc08" type="CONFIG:CONFIGERROR" description='"this flow having CONFIG error. can you please check this flow."'/>
+		<logger level="INFO" doc:name="Logger" doc:id="141f9367-c6a5-4a35-ba16-8ca599facca8" message='"afer error"'/>
+	</flow>
+</mule>

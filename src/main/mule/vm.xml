@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+	<vm:config name="VM_Config" doc:name="VM Config" doc:id="5ce502e9-c268-4626-80a3-d586e4b33a04" >
+		<vm:queues >
+			<vm:queue queueName="ifthakar" />
+		</vm:queues>
+	</vm:config>
+	<flow name="vmFlow" doc:id="ea67b55d-df23-4ffe-b5e1-6a6e1da9fa50" >
+		<http:listener doc:name="Listener" doc:id="8f326cbb-7ab4-497e-90bb-dbfc8bf42986" config-ref="HTTP_Listener_config_common" path="/vm"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d3ff7225-b75b-481c-9d05-983be3c93f27" message='"before vm"'/>
+		<vm:publish queueName="ifthakar" doc:name="Publish" doc:id="ecc1258a-ec93-43eb-9bb6-891977f63c56" config-ref="VM_Config"/>
+	</flow>
+	<flow name="vmFlow1" doc:id="98d1e7db-18a8-4760-84ed-d9c106736df8" >
+		<vm:listener queueName="ifthakar" doc:name="Listener" doc:id="43d31c10-4e36-4ea8-97b3-ffaae79f3b36" config-ref="VM_Config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ee1fdc0e-5aa2-4f2c-b577-ec606403ec1e" message='#["this is after vm"]'/>
+	</flow>
+</mule>

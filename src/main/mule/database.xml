@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="cdd08298-9509-4517-9280-08c2c18c3168" >
+		<db:oracle-connection host="localhost" user="system" password="tiger" instance="orcl" />
+	</db:config>
+	<flow name="databaseFlow" doc:id="2b7a208c-095e-4e07-9f8c-869fafbd5531" >
+		<http:listener doc:name="Listener" doc:id="a212f2f8-9d20-4b82-8b80-f038e5841709" config-ref="HTTP_Listener_config_common" path="/odb"/>
+		<db:select doc:name="Select" doc:id="7a657f49-138d-4cc5-8f3c-6eb64f3e47a4" config-ref="Database_Config">
+			<db:sql >select * from document</db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="0c77dd5a-7121-40c5-8dfb-09f5e0080d54" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="074db1b8-3f40-48c3-a631-861e7cad0bfd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload[3]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="databaseFlow1" doc:id="1cddc92b-7d90-4988-a727-7644e8a6762a" >
+		<http:listener doc:name="Listener" doc:id="7b4c9547-2fd5-4a30-b33f-04084e817249" config-ref="HTTP_Listener_config_common" path="/insert" allowedMethods="POST"/>
+		<db:insert doc:name="Insert" doc:id="fdd84c7b-df99-4d26-9cb5-f7e3a8d3b222" config-ref="Database_Config">
+			<db:sql >INSERT INTO SYSTEM.&quot;DOCUMENT&quot; (ID, FIRSTNAME, LASTNAME) VALUES ('7', 'RAM', 'LAXMAN')
+</db:sql>
+		</db:insert>
+		<ee:transform doc:name="Transform Message" doc:id="03b337b7-9d07-4edc-a89c-259d748b5e54" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="6628e868-029a-4498-9e6a-3f06cd2f5340" message='"record created successfully"'/>
+	</flow>
+</mule>

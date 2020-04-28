@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="variableFlow" doc:id="84c4272e-cb44-415a-976d-03a3279189eb" >
+		<http:listener doc:name="Listener" doc:id="b3796270-3558-4a61-8cf0-6756a6be0123" config-ref="HTTP_Listener_config_common" path="/var"/>
+		<logger level="INFO" doc:name="Logger" doc:id="cdc6980d-e046-455d-b8cc-d0f38036928e" message='"this is about variable concept"'/>
+		<set-variable value="Viswarupachari" doc:name="Set Variable" doc:id="b63473d5-d647-45c7-ae7a-04ba17b6c6b1" variableName="FirstName"/>
+		<set-variable value=".Bezagam" doc:name="Set Variable" doc:id="adfd7d5b-a61c-4f98-8ee4-998654808aea" variableName="LastName"/>
+		<flow-ref doc:name="Flow Reference" doc:id="851f2a5e-ad97-4da9-8e52-40f1a1bebc87" name="Sub_Flow11"/>
+		<flow-ref doc:name="Flow Reference" doc:id="36af3b95-7700-4183-9709-083e37d294db" name="PrivateFlow11"/>
+		<set-payload value="#[vars.FirstName ++ vars.LastName]" doc:name="Set Payload" doc:id="11264b45-e647-4824-baa9-39f1c33ae2ea" mimeType="application/json"/>
+	</flow>
+	<flow name="PrivateFlow11" doc:id="dcc88aa8-4598-4765-9b34-24cb4413a3cc" >
+		<set-variable value=".iftar" doc:name="Set Variable" doc:id="f0dceaa6-d241-4245-9d51-746b81a89b76" variableName="LastName"/>
+	</flow>
+	<sub-flow name="Sub_Flow11" doc:id="8e666bac-453b-4e6d-ad48-a225acd9be66" >
+		<set-variable value=".faro" doc:name="Set Variable" doc:id="1547668d-9520-4a62-ad0c-90ff86e3d19e" variableName="LastName"/>
+	</sub-flow>
+</mule>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="50d19f4d-4d94-4072-8499-d903163bcc78" >
+		<file:connection workingDir="E:\" />
+	</file:config>
+	<flow name="FileFlow" doc:id="2b6efe7f-a5ea-4708-8274-ad3306081f1d" >
+		<file:listener doc:name="On New or Updated File" doc:id="185795ca-0997-4971-9ec9-b7c3e2a93207" config-ref="File_Config" directory="E:\MulesoftExamples\FileExample\input1" autoDelete="true" moveToDirectory="E:\MulesoftExamples\FileExample\output12">
+			<scheduling-strategy >
+				<fixed-frequency frequency="3000"/>
+			</scheduling-strategy>
+		</file:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="902edb15-9ea0-490a-a5fc-b57c9710d477" message="#[payload]"/>
+	</flow>
+	<flow name="FileFlow1" doc:id="ee11a694-805c-4875-87d4-fd2d47bd62f4" >
+		<http:listener doc:name="Listener" doc:id="e3ef2e0a-b4f3-4339-9627-3202acadeac0" path="/files" config-ref="HTTP_Listener_config_common"/>
+		<file:create-directory doc:name="Create directory" doc:id="ed96633e-8d50-4430-ba24-68df7140a756" config-ref="File_Config" directoryPath="E:\MulesoftExamples\FileExample\pratap"/>
+	</flow>
+</mule>

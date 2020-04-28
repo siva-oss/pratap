@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="76db0110-1eed-46c7-9fb2-d8f6c4fe9bc4" >
+		<http:request-connection host="localhost" port="8089" />
+	</http:request-config>
+	<flow name="pratapFlow" doc:id="a68467dc-fdc6-4f8a-a3db-eb95d74b81e6" >
+		<http:listener doc:name="Listener" doc:id="5d056a9c-e87e-480e-9dcc-221bdb0b30b2" path="/sample" config-ref="HTTP_Listener_config_common"/>
+		<set-payload value='#["HI Pratap Good Morning for me and Good evening for you"]' doc:name="Set Payload" doc:id="39a45ff0-c4ae-43bf-80c2-30b63af1e2e7" mimeType="application/json"/>
+		<logger level="INFO" doc:name="Logger" doc:id="82c57d3b-7f5f-41c8-9bbc-ecf7df76ddd7" message="#[payload]"/>
+		<http:request method="GET" doc:name="Request" doc:id="23efa5db-31ab-4747-b011-fd43d10c1038" config-ref="HTTP_Request_configuration" path="/sample22"/>
+		<logger level="INFO" doc:name="Logger" doc:id="45e1b55d-3fcb-4bf8-9494-26bfdcc69c9a" message="#[payload]"/>
+	</flow>
+	<flow name="pratapFlow1" doc:id="eb7db42c-a610-408c-95f2-c66c0e221a94" >
+		<http:listener doc:name="Listener" doc:id="1c812ffc-cfc0-498d-9b5e-171eb244df6c" path="/sample22" config-ref="HTTP_Listener_config_common"/>
+		<set-payload value='#["this is sample22 http listner"]' doc:name="Set Payload" doc:id="a390e801-135e-40e5-93bf-4fb5c50f028d" mimeType="application/json"/>
+		<flow-ref doc:name="PrivateFlow" doc:id="f5697257-bd76-4fa6-965b-7b36b2d7f785" name="PrivateFlow"/>
+		<flow-ref doc:name="Sub_Flow" doc:id="f2b53eff-8e55-4226-8e76-0b652f15199b" name="Sub_Flow"/>
+	</flow>
+	<flow name="pratapFlow2" doc:id="075c27ff-7c7c-4064-91d3-6fab993e7cf2" >
+		<http:listener doc:name="Listener" doc:id="1e1cd739-a490-4730-b3d7-bbac95b1824c" config-ref="HTTP_Listener_config_common" path="/db"/>
+		<db:select doc:name="Select" doc:id="ffdc2955-4454-45ab-9cb7-5427d2d47ba0" config-ref="Database_Config">
+			<db:sql >select * from document</db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="e413efe4-377e-4f93-8c87-25cf6072f312" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="fa138d4c-85a1-4fd4-9499-9f4c7a79fe33" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload[2]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
